@@ -1,6 +1,5 @@
 networkx
 pandas
 geopandas
-pydeck~=0.5
 dash
 dash_bootstrap_components

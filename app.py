@@ -155,10 +155,10 @@ app.layout = html.Div(
                                         dbc.Table(
                                             children=[
                                                 html.Tbody([
-                                                    html.Tr([html.Td("Temp"), html.Td("3.1")]),
+                                                    html.Tr([html.Td("Sea Surface Temperature"), html.Td("3.1")]),
                                                     html.Tr([html.Td("Krill"), html.Td("8")]),
-                                                    html.Tr([html.Td("Pudus"), html.Td("1000000+")]),
-                                                    html.Tr([html.Td("besitos"), html.Td("infty")]),
+                                                    html.Tr([html.Td("EKEm"), html.Td("1000000+")]),
+                                                    html.Tr([html.Td("Clorofila"), html.Td("infty")]),
                                                 ])
                                             ],
                                             striped=True,
