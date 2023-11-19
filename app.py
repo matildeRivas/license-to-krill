@@ -31,13 +31,15 @@ load_dotenv()
 
 mapbox_api_token = os.getenv("MAPBOX_ACCESS_TOKEN")
 
-
-PLOTLY_LOGO = "https://images.plot.ly/logo/new-branding/plotly-logomark.png"
+external_stylesheets = [
+    dbc.themes.FLATLY,
+    "https://fonts.googleapis.com/css2?family=Syne&display=swap"
+]
 
 _DATA_PATH = "data/"
 colors = {
     "background": "#faf9f7",
-    "text-dark": "#101851",
+    "dark": "#1c3052ff",
     "text-light": "#7AB3DC",
     "background-mid": "#4B4C51",
 }
@@ -47,12 +49,13 @@ _ZONE_MAPPING = {"management-zone":{"figtype":"json_layer","file":"data/ssmu.geo
                  "restricted-zone":{"figtype":"json_layer","file":"data/restricted.json", 'color': "red", 'opacity':0.3, 'fill':{'outlinecolor':'red'}},
                  "ecosystem-zone":{"figtype":"scatter","file":"data/vulnerable_marine_ecosystems.csv", }}
 
-app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY])
+app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY, "https://fonts.googleapis.com/css2?family=Syne&display=swap"])
+app.css.config.serve_locally = True
 
 app.layout = html.Div(
     style={
         "backgroundColor": colors["background"],
-        "font-family": "Ubuntu",
+        "font-family": "Syne",
         "padding": "1rem 2rem",
         "min-height": "100vh",
     },
@@ -60,10 +63,12 @@ app.layout = html.Div(
         html.Div(
             style={
                 "textAlign": "center",
-                # "color": colors["text-light"],
+                "color": colors["dark"],
                 "padding-bottom": "1rem",
             },
-            children="Estimación de la abundancia de Krill en la Antártica",
+            children = [
+                html.H1("License to Krill"),
+                "Estimación de la abundancia de Krill en la Antártica",]
         ),
         html.Div(
             style={
@@ -192,7 +197,6 @@ app.layout = html.Div(
                                                     html.Tr([html.Td("Sea Surface Temperature"), html.Td(id="SSTm-point", children=["-  g/m²"])]),
                                                     html.Tr([html.Td("Krill"), html.Td(id="krill-point", children=["- psu"])]),
                                                     html.Tr([html.Td("Sea Surface Salinity"), html.Td(id="SSSm-point", children=["- °C"])]),
-                                                    html.Tr([html.Td("Current speed"), html.Td(id="current-point", children=["- m/s"])]),
                                                     html.Tr([html.Td("Sea surface height"), html.Td(id="ZOSm-point", children=["- m"])]),
                                                     html.Tr([html.Td("Chlorophyll a"), html.Td(id="chlm-point", children=["-  mg/m³"])]),
                                                 ])
