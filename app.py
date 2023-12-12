@@ -7,17 +7,12 @@ import os
 import json
 
 import dash
-import pydeck as pdk
 import pandas as pd
-import geopandas as gpd
 import plotly.graph_objects as go
 import plotly.express as px
-from plotly.subplots import make_subplots
 import dash_bootstrap_components as dbc
-import plotly.figure_factory as ff
 import json
 
-import shapely.geometry
 import numpy as np
 from shapely.affinity import affine_transform as T
 from shapely.affinity import rotate as R
