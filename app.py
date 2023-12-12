@@ -46,6 +46,7 @@ _ZONE_MAPPING = {"management-zone":{"figtype":"json_layer","file":"data/ssmu.geo
 
 app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY, "https://fonts.googleapis.com/css2?family=Syne&display=swap"])
 app.css.config.serve_locally = True
+server = app.server
 
 app.layout = html.Div(
     className="page",
