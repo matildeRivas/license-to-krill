@@ -53,42 +53,33 @@ app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY, "https://fonts.googleap
 app.css.config.serve_locally = True
 
 app.layout = html.Div(
-    style={
-        "backgroundColor": colors["background"],
-        "font-family": "Syne",
-        "padding": "1rem 2rem",
-        "min-height": "100vh",
-    },
+    className="page",
     children=[
         html.Div(
-            style={
-                "textAlign": "center",
-                "color": colors["dark"],
-                "padding-bottom": "1rem",
-            },
+            className="header",
             children = [
-                html.H1("License to Krill"),
-                "Estimación de la abundancia de Krill en la Antártica",]
+                dbc.NavbarSimple(
+                    children=[
+                        dbc.NavItem(dbc.NavLink("Home", href="#")),
+                        dbc.NavItem(dbc.NavLink("About", href="#")),
+                        dbc.NavItem(dbc.NavLink("Contact", href="#")),
+                    ],
+                    brand="License to Krill",
+                    brand_href="#",
+                    color=colors["dark"],
+                    dark=True,
+                ),
+                html.H3("Estimation of krill abundance in the Antarctic Peninsula"),
+            ],
         ),
         html.Div(
-            style={
-                "display": "flex",
-                "column-gap": "1rem",
-            },
+            className="content",
             children=[
                 html.Div(  # left pannel
-                    style={
-                        "flex": "1 0",
-                        "display": "flex",
-                        "flex-direction": "column",
-                        "row-gap": ".5rem",
-                    },
+                    className="left-pannel",
                     children=[
                         html.Div(
-                            style={
-                                "display": "flex",
-                                "column-gap": ".5rem",
-                            },
+                            className="map-pickers",
                             children=[
                                 html.Div(
                                     children=[
@@ -109,8 +100,11 @@ app.layout = html.Div(
                                     className="radio-group",
                                 ),
                                 dcc.Dropdown(
-                                    options=["1993","1995","1996","1997","1998", "1999", "2001", "2002", "2003", "2005", "2006", "2007", "2009", "2011"],
-                                    value="2011",
+                                    options=["1993","1995","1996","1997","1998", "1999", "2001", "2002", "2003", "2005", "2006", "2007", "2009", "2011",
+                                             "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025",
+                                             "2026", "2027", "2028", "2029", "2030"]
+                                    ,
+                                    value="2024",
                                     id="year",
                                     style={ "width": "6rem" },
                                     maxHeight=400,
@@ -118,8 +112,11 @@ app.layout = html.Div(
                                     clearable=False,
                                 ),
                                 dcc.Dropdown(
-                                    options=["January","February","March"],
-                                    value="February",
+                                    options=[
+                                        {"label":"January", "value":"01"},
+                                        {"label":"February", "value":"02"},
+                                        {"label":"December", "value":"12"}],
+                                    value="01",
                                     id="month",
                                     style={ "width": "6rem" },
                                     maxHeight=400,
@@ -134,7 +131,7 @@ app.layout = html.Div(
                         ),
                         html.Div(
                             id = "layer-pickers",
-                            style = {"display": "flex", "justify-content": "flex-start", "gap":"20px"},
+                            className="map-pickers",
                             children=[
                                 html.Div(  # layer selector
                                   children=[
@@ -148,7 +145,6 @@ app.layout = html.Div(
                                           {"label": "All", "value": "all"},
                                           {"label": "Krill", "value": "Krill"},
                                           {"label": "Surface Temperature", "value": "SSTm"},
-                                          #{"label": "Sea Ice Fraction", "value": "SIFm"},
                                       ],
                                       value="all",
                                   ),
@@ -156,35 +152,30 @@ app.layout = html.Div(
                               className="radio-group",
                           ),
                                 html.Div(
-                                            children=[
-                                                dbc.Checklist(
-                                                    id="zone-layer",
-                                                    className="btn-group",
-                                                    inputClassName="btn-check",
-                                                    labelClassName="btn btn-sm btn-outline-primary",
-                                                    labelCheckedClassName="active",
-                                                    options=[
-                                                        {"label": "Protected zones", "value": "protected-zone"},
-                                                        {"label": "Management zones", "value": "management-zone"},
-                                                        {"label": "Vulnerable marine ecosystems", "value": "ecosystem-zone"},
-                                                    ],
-                                                ),
-                                                html.Div(id="output-zones"),
+                                    children=[
+                                        dbc.Checklist(
+                                            id="zone-layer",
+                                            className="btn-group",
+                                            inputClassName="btn-check",
+                                            labelClassName="btn btn-sm btn-outline-primary",
+                                            labelCheckedClassName="active",
+                                            options=[
+                                                {"label": "Protected zones", "value": "protected-zone"},
+                                                {"label": "Management zones", "value": "management-zone"},
+                                                {"label": "Vulnerable marine ecosystems", "value": "ecosystem-zone"},
                                             ],
-                                            className="radio-group",
                                         ),
+                                        html.Div(id="output-zones"),
+                                    ],
+                                    className="radio-group",
+                                ),
                             ]
                         ),
                         
                     ],
                 ), 
                 html.Div(  # right pannel
-                    style={
-                        "flex": "0 0 13rem",
-                        "display": "flex",
-                        "flex-direction": "column",
-                        "row-gap": ".5rem",
-                    },
+                    className="right-pannel",
                     children=[
                         dcc.Tab(
                             html.Div(children=[
@@ -198,16 +189,13 @@ app.layout = html.Div(
                                                     html.Tr([html.Td("Krill"), html.Td(id="krill-point", children=["- psu"])]),
                                                     html.Tr([html.Td("Sea Surface Salinity"), html.Td(id="SSSm-point", children=["- °C"])]),
                                                     html.Tr([html.Td("Sea surface height"), html.Td(id="ZOSm-point", children=["- m"])]),
-                                                    html.Tr([html.Td("Chlorophyll a"), html.Td(id="chlm-point", children=["-  mg/m³"])]),
+                                                    html.Tr([html.Td("Chlorophyll"), html.Td(id="chlm-point", children=["-  mg/m³"])]),
                                                 ])
                                             ],
                                             striped=True,
-                                         )
+                                        )
                                     ]),
-                                ],
-                                style={
-
-                                }),
+                                ]),
                             ]),
                             label="Hover",
                         ),
@@ -215,6 +203,7 @@ app.layout = html.Div(
                 ),
             ],
         ),
+        html.Footer(style={"background-color":colors["dark"]})
     ],
 )
 
@@ -222,13 +211,14 @@ app.layout = html.Div(
 @callback(
     Output("krill-heatmap-container", "children"),
     Input("year", "value"),
+    Input("month", "value"),
     Input("map-style", "value"),
     Input("map-layer", "value"),
     Input("zone-layer", "value"),
 )
-def update_map(year, mapbox_style, layer, zone_layers):
+def update_map(year, month, mapbox_style, layer, zone_layers):
     
-    krill_df = pd.read_csv("{}{year_val}-01-01.csv".format(_DATA_PATH, year_val=year), header=0)
+    krill_df = pd.read_csv("{}{year_val}-{month_val}.csv".format(_DATA_PATH, year_val=year, month_val=month), header=0)
     fig= px.scatter_mapbox(pd.DataFrame({"lat": [], "lon": []}), lat = "lat", lon="lon" )
     count = 0
     len_offset = { 1:0.375, 2:0.125, 3:0.125/3, 4:0 }
@@ -241,52 +231,13 @@ def update_map(year, mapbox_style, layer, zone_layers):
         n = len(checklist)
         figx = go.Densitymapbox(lat=krill_df.Latitud, lon=krill_df.Longitud, z=krill_df[txt], colorscale=manual_colorscales[txt],
                                 radius=25, opacity=0.6,legendrank=1, hoverinfo="lon+lat", name=txt,
-                                colorbar= dict(x=1,y= 0.875 - (count/n) - len_offset[n] , len = 1/n, title = txt)
-                                , customdata=krill_df[["Krill", "SSSm", "SSTm", "ZOSm", "chlm"]])
+                                colorbar= dict(x=1,y= 0.875 - (count/n) - len_offset[n] , len = 1/n, title = txt, tickfont={"size":16})
+                                , customdata=krill_df[["Krill", "SSSm", "SSTm", "ZOSm", "CHLm"]])
         count+=1    
         fig.add_trace(figx)
-    # wind direction and strength
-    a = shapely.wkt.loads(
-    "POLYGON ((-0.6227064947841563 1.890841205238906, -0.3426264166591566 2.156169330238906, -0.07960493228415656 2.129731830238906, 1.952059130215843 0.022985736488906, -0.2085619635341561 -2.182924419761094, -0.6397611822841562 -1.872877544761094, -0.6636088385341563 -1.606053326011095, 0.5862935052158434 -0.400158794761094, -2.312440869784157 -0.3993228572610942, -2.526870557284156 -0.1848931697610945, -2.517313916659156 0.2315384708639062, -2.312440869784157 0.3990052677389059, 0.5862935052158434 0.399841205238906, -0.6363314947841564 1.565763080238906, -0.6227064947841563 1.890841205238906))"
-)
+
     krill_df["current_speed"] = np.sqrt(krill_df["Um"] *krill_df["Um"] + krill_df["Vm"]*krill_df["Vm"])
     krill_df["current_direction"] = np.arctan2(krill_df["Vm"],krill_df["Um"])
-    """
-    t = (
-    px.scatter_mapbox(krill_df[krill_df.Um.notnull()][["Um", "Vm","Latitud", "Longitud"]], lat="Latitud", lon="Longitud")
-    .data[0]
-    )
-
-    fig.add_trace(t)
-    
-    fig_arrow = px.choropleth_mapbox(
-    krill_df,
-    geojson=gpd.GeoSeries(
-        krill_df.loc[:, ["Longitud", "Latitud", "current_direction", "current_speed"]].apply(
-            lambda r: R(
-                T(a, [r["current_speed"], 0, 0, r["current_speed"], r["Longitud"], r["Latitud"]]),
-                r["current_direction"],
-                origin=(r["Latitud"], r["Longitud"]),
-                use_radians=True,
-            ),
-            axis=1,
-        )
-    ).__geo_interface__,
-    locations=krill_df.index,
-    color = krill_df['current_speed']
-    
-    )
-    
-    fig_arrow = go.FigureWidget(ff.create_quiver(krill_df["Longitud"], krill_df["Latitud"], krill_df["Um"], krill_df["Vm"],
-                       scale=.25,
-                       arrow_scale=.4,
-                       name='quiver',
-                       line_width=1))
-    
-    fig.add_trace(fig_arrow.data[0])
-
-    """
-
     map_layers = []
     if mapbox_style == "satellite":
         map_layers.append(
@@ -303,7 +254,7 @@ def update_map(year, mapbox_style, layer, zone_layers):
     else:
         map_layers.append({
                     "below": "traces",})
-        fig.update_layout(mapbox_style="dark")
+        fig.update_layout(mapbox_style="outdoors")
     try:
       for z in zone_layers:
           info = _ZONE_MAPPING[z]
@@ -347,7 +298,7 @@ def update_map(year, mapbox_style, layer, zone_layers):
     Input("map_object", "clickData"),
 )
 def display_popup(clickData):
-    cd = ["Krill", "SSSm", "SSTm", "ZOSm", "chlm"]
+    cd = ["Krill", "SSSm", "SSTm", "ZOSm", "CHLm"]
     units = [" g/m²", " psu", "°C", " m", " mg/m³"]
     ans = []
     for i, txt in enumerate(cd):
