@@ -4,3 +4,4 @@ geopandas
 dash
 dash_bootstrap_components
 ipywidgets>=7.0.0
+dotenv
