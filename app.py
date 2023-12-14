@@ -39,9 +39,9 @@ colors = {
     "background-mid": "#4B4C51",
 }
 
-_ZONE_MAPPING = {"management-zone":{"figtype":"json_layer","file":"data/ssmu.geojson", 'color': "purple", 'opacity':0.3, 'fill':{'outlinecolor':'grey'}},
-                 "protected-zone":{"figtype":"json_layer","file":"data/protected.json", 'color': "yellow", 'opacity':0.3, 'fill':{'outlinecolor':'grey'}},
-                 "restricted-zone":{"figtype":"json_layer","file":"data/restricted.json", 'color': "red", 'opacity':0.3, 'fill':{'outlinecolor':'red'}},
+_ZONE_MAPPING = {"management-zone":{"figtype":"json_layer","file":"data/ssmu.geojson", 'color': "purple", 'opacity':0.3, 'fill':False},
+                 "protected-zone":{"figtype":"json_layer","file":"data/protected.json", 'color': "red", 'opacity':0.3, 'fill':True},
+                 "restricted-zone":{"figtype":"json_layer","file":"data/restricted.json", 'color': "yellow", 'opacity':0.3, 'fill':True},
                  "ecosystem-zone":{"figtype":"scatter","file":"data/vulnerable_marine_ecosystems.csv", }}
 
 app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY, "https://fonts.googleapis.com/css2?family=Syne&display=swap"])
@@ -157,6 +157,7 @@ app.layout = html.Div(
                                             labelCheckedClassName="active",
                                             options=[
                                                 {"label": "Protected zones", "value": "protected-zone"},
+                                                {"label": "Voluntary Restricted zones", "value": "restricted-zone"},
                                                 {"label": "Management zones", "value": "management-zone"},
                                                 {"label": "Vulnerable marine ecosystems", "value": "ecosystem-zone"},
                                             ],
@@ -259,6 +260,12 @@ def update_map(year, month, mapbox_style, layer, zone_layers):
                 file_contents = user_file.read()      
             layer_json = json.loads(file_contents)
             map_layers.append({'source':layer_json,  'type': "line", 'below': "traces", 'color': info["color"]})
+            if info["fill"] == True:
+                with open(info["file"]) as user_file:
+                    file_contents = user_file.read()      
+                    layer_json = json.loads(file_contents)
+                    map_layers.append({'source':layer_json,  'type': "fill", 'below': "traces", 'color': info["color"], 'opacity':info["opacity"]})
+                    
           elif info["figtype"] == "scatter":
               marine_ecosystems = pd.read_csv(info["file"], sep=",")
               fig_me= go.Scattermapbox(mode="markers", lat = marine_ecosystems["Latitud"], lon=marine_ecosystems["Longitud"],
