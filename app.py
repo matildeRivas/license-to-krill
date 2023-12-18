@@ -260,12 +260,13 @@ def update_map(year, month, mapbox_style, layer, zone_layers):
                 file_contents = user_file.read()      
             layer_json = json.loads(file_contents)
             map_layers.append({'source':layer_json,  'type': "line", 'below': "traces", 'color': info["color"]})
+            """
             if info["fill"] == True:
                 with open(info["file"]) as user_file:
                     file_contents = user_file.read()      
                     layer_json = json.loads(file_contents)
                     map_layers.append({'source':layer_json,  'type': "fill", 'below': "traces", 'color': info["color"], 'opacity':info["opacity"]})
-                    
+                    """
           elif info["figtype"] == "scatter":
               marine_ecosystems = pd.read_csv(info["file"], sep=",")
               fig_me= go.Scattermapbox(mode="markers", lat = marine_ecosystems["Latitud"], lon=marine_ecosystems["Longitud"],
@@ -311,4 +312,4 @@ def display_popup(clickData):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)
